@@ -2,26 +2,50 @@ import time
 from random import randint
 
 """
-quick_sort_simple: 2.341970754000158 Space: #5
-quick_sort: 2.9085828580000452  Space: #3
-merge_sort: 4.653204685999754 Space: #4
-heap_sort: 6.302412788000311 Space: #1
-merge_sort_inplace: 12.273294753999835 Space: #2
+quick_sort:
+    Time: 0.00242	Time Ratio: 1.0	    Space: O(lg_n)~O(n) / low ~ medium
+quick_sort_simple:
+    Time: 0.00287	Time Ratio: 1.187	Space: O(n*lg_n)~(n^2) / medium ~ high
+merge_sort:
+    Time: 0.00296	Time Ratio: 1.221	Space: O(n*lg_n) / medium
+heap_sort:
+    Time: 0.00563	Time Ratio: 2.328	Space: O(lg_n) / low
+merge_sort_inplace:
+    Time: 0.01208	Time Ratio: 4.991	Space: O(lg_n) / low
+selection_sort:
+    Time: 0.0447	Time Ratio: 18.471	Space: O(1) / very low
+insertion_sort:
+    Time: 0.05512	Time Ratio: 22.78	Space: O(1) / very low
+bubble_sort:
+    Time: 0.11216	Time Ratio: 46.35	Space: O(1) / very low
 """
+
+
+def mean(arr):
+    return sum(arr) / len(arr)
+
 
 def test_sort(func):
     try:
-        start = time.perf_counter()
-        for _ in range(1000):
-            x = [randint(-100, 100) for _ in range(1000)]
+        times = []
+
+        for _ in range(100):
+            x = [randint(-10000, 10000) for _ in range(1000)]
+
+            start = time.perf_counter()
             y = func(x)
+            end = time.perf_counter()
+            times.append(end - start)
+
             if y is not None:
                 x = y
             assert x == sorted(x), f"{func.__name__} failed to sort."
-        end = time.perf_counter()
-        print(f"{func.__name__}: {end - start}")
+
+        return mean(times)
+
     except AssertionError as e:
         print(f"{str(e)}")
+        return float("inf")
 
 
 def heap_sort(arr):
@@ -29,7 +53,7 @@ def heap_sort(arr):
     Sort a list in ascending order, using heap sort.
 
     time = O(n*lg_n)
-    space = O(1)
+    space = O(lg_n)
     """
 
     def _heapify(arr, n, i):
@@ -176,9 +200,9 @@ def merge_sort(arr):
     def _merge_sort(arr):
         if len(arr) <= 1:
             return
-        # if len(arr) <= 16:
-        #    _insertion_sort(arr)
-        #    return
+        if len(arr) <= 16:
+            _insertion_sort(arr)
+            return
 
         mid = len(arr) // 2
 
@@ -266,6 +290,7 @@ def quick_sort(arr):
 
     _quick_sort(arr, 0, n - 1)
 
+
 def quick_sort_simple(arr):
     """
     Sorts a list in ascending order, using a variation of quick sort.
@@ -279,7 +304,7 @@ def quick_sort_simple(arr):
     if n <= 1:
         return arr
 
-    pivot = arr[randint(0, n-1)]
+    pivot = arr[randint(0, n - 1)]
 
     lesser = [x for x in arr if x < pivot]
     equal = [x for x in arr if x == pivot]
@@ -288,10 +313,80 @@ def quick_sort_simple(arr):
     return quick_sort_simple(lesser) + equal + quick_sort_simple(greater)
 
 
+def bubble_sort(arr):
+    """
+    Sort a list in ascending order, using bubble sort.
+
+    time = O(n^2)
+    space = O(1)
+    """
+    n = len(arr)
+
+    for i in range(n):
+        swapped = False
+        for j in range(n - i - 1):
+            if arr[j + 1] < arr[j]:
+                arr[j + 1], arr[j] = arr[j], arr[j + 1]
+                swapped = True
+        if not swapped:
+            break
+
+
+def selection_sort(arr):
+    """
+    Sort a list in ascending order, using selection sort.
+
+    time = O(n^2)
+    space = O(1)
+    """
+    n = len(arr)
+
+    for i in range(n - 1):
+        least = i
+        for j in range(i + 1, n):
+            if arr[j] < arr[least]:
+                least = j
+        arr[i], arr[least] = arr[least], arr[i]
+
+
+def insertion_sort(arr):
+    """
+    Sort a list in ascending order, using insertion sort.
+
+    time = O(n^2)
+    space = O(1)
+    """
+    n = len(arr)
+
+    for i in range(n):
+        key = arr[i]
+        j = i - 1
+        while j >= 0 and arr[j] > key:
+            arr[j + 1] = arr[j]
+            j -= 1
+        arr[j + 1] = key
+
 
 if __name__ == '__main__':
-    test_sort(quick_sort)
-    test_sort(quick_sort_simple)
-    test_sort(merge_sort)
-    test_sort(merge_sort_inplace)
-    test_sort(heap_sort)
+    funcs = [
+        (quick_sort, "O(lg_n)~O(n) / low ~ medium"),
+        (quick_sort_simple, "O(n*lg_n)~(n^2) / medium ~ high"),
+        (merge_sort, "O(n*lg_n) / medium"),
+        (merge_sort_inplace, "O(lg_n) / low"),
+        (heap_sort, "O(lg_n) / low"),
+        (bubble_sort, "O(1) / very low"),
+        (selection_sort, "O(1) / very low"),
+        (insertion_sort, "O(1) / very low")
+    ]
+
+    times = []
+
+    for f, space in funcs:
+        times.append((f.__name__, test_sort(f), space))
+
+    times.sort(key=lambda x: x[1])
+
+    for f, time, space in times:
+        time_ratio = time / times[0][1]
+        print(f"{f}:\n\tTime: {round(time, 5)}\tTime Ratio: "
+              f"{round(time_ratio, 3)}\tSpace: {space}")
