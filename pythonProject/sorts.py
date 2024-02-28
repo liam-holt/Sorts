@@ -2,22 +2,24 @@ import time
 from random import randint
 
 """
-quick_sort:
-    Time: 0.00242	Time Ratio: 1.0	    Space: O(lg_n)~O(n) / low ~ medium
+quick_sort_in_place:
+    Time: 0.00261	Time Ratio: 1.0	    Space: O(lg_n)~O(n) / low ~ medium
+merge_sort_temp_arrays:
+    Time: 0.00363	Time Ratio: 1.39	Space: O(n*lg_n) / medium
 quick_sort_simple:
-    Time: 0.00287	Time Ratio: 1.187	Space: O(n*lg_n)~(n^2) / medium ~ high
-merge_sort:
-    Time: 0.00296	Time Ratio: 1.221	Space: O(n*lg_n) / medium
-heap_sort:
-    Time: 0.00563	Time Ratio: 2.328	Space: O(lg_n) / low
+    Time: 0.00459	Time Ratio: 1.758	Space: O(n*lg_n)~(n^2) / medium ~ high
+heap_sort_iterative:
+    Time: 0.00539	Time Ratio: 2.062	Space: O(1) / very low
+heap_sort_recursive:
+    Time: 0.00552	Time Ratio: 2.113	Space: O(lg_n) / low
 merge_sort_inplace:
-    Time: 0.01208	Time Ratio: 4.991	Space: O(lg_n) / low
+    Time: 0.01181	Time Ratio: 4.521	Space: O(lg_n) / low
 selection_sort:
-    Time: 0.0447	Time Ratio: 18.471	Space: O(1) / very low
+    Time: 0.04606	Time Ratio: 17.635	Space: O(1) / very low
 insertion_sort:
-    Time: 0.05512	Time Ratio: 22.78	Space: O(1) / very low
+    Time: 0.05537	Time Ratio: 21.198	Space: O(1) / very low
 bubble_sort:
-    Time: 0.11216	Time Ratio: 46.35	Space: O(1) / very low
+    Time: 0.11289	Time Ratio: 43.218	Space: O(1) / very low
 """
 
 
@@ -47,8 +49,43 @@ def test_sort(func):
         print(f"{str(e)}")
         return float("inf")
 
+def heap_sort_iterative(arr):
+    """
+    Sort a list in ascending order, using heap sort.
 
-def heap_sort(arr):
+    time = O(n*lg_n)
+    space = O(1)
+    """
+    n = len(arr)
+    if n <= 1:
+        return
+
+    def _heapify(arr, n, i):
+        while i < n:
+            left = 2 * i + 1
+            right = 2 * i + 2
+            largest = i
+
+            if left < n and arr[left] > arr[largest]:
+                largest = left
+            if right < n and arr[right] > arr[largest]:
+                largest = right
+
+            if largest != i:
+                arr[i], arr[largest] = arr[largest], arr[i]
+                i = largest
+            else:
+                return
+
+    for i in range(n // 2 - 1, -1, -1):
+        _heapify(arr, n, i)
+
+    for i in range(n - 1, 0 , -1):
+        arr[i], arr[0] = arr[0], arr[i]
+        _heapify(arr, i, 0)
+
+
+def heap_sort_recursive(arr):
     """
     Sort a list in ascending order, using heap sort.
 
@@ -153,7 +190,7 @@ def merge_sort_inplace(arr):
     _merge_sort(arr, 0, n - 1)
 
 
-def merge_sort(arr):
+def merge_sort_temp_arrays(arr):
     """
     Sort a list in ascending order, using merge sort.
 
@@ -217,7 +254,7 @@ def merge_sort(arr):
     _merge_sort(arr)
 
 
-def quick_sort(arr):
+def quick_sort_in_place(arr):
     """
     Sort a list in ascending order, using quick sort.
 
@@ -369,11 +406,12 @@ def insertion_sort(arr):
 
 if __name__ == '__main__':
     funcs = [
-        (quick_sort, "O(lg_n)~O(n) / low ~ medium"),
+        (quick_sort_in_place, "O(lg_n)~O(n) / low ~ medium"),
         (quick_sort_simple, "O(n*lg_n)~(n^2) / medium ~ high"),
-        (merge_sort, "O(n*lg_n) / medium"),
+        (merge_sort_temp_arrays, "O(n*lg_n) / medium"),
         (merge_sort_inplace, "O(lg_n) / low"),
-        (heap_sort, "O(lg_n) / low"),
+        (heap_sort_recursive, "O(lg_n) / low"),
+        (heap_sort_iterative, "O(1) / very low"),
         (bubble_sort, "O(1) / very low"),
         (selection_sort, "O(1) / very low"),
         (insertion_sort, "O(1) / very low")
