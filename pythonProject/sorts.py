@@ -604,13 +604,3 @@ if __name__ == '__main__':
     # print_sorts(large_sorters, LARGE_DATA)
     # print_sorts(small_sorters, SMALL_DATA)
 
-    d = {
-            "name": "Quick Sort w/ Insertion", "time": "O(n*lg_n)~O(n^2)",
-            "space": "O(lg_n)~O(n)", "is_inplace": True, "is_stable": False,
-            "is_recursive": True,
-            "function": quick_sort_recursive_inplace_unstable_insertion
-        }
-
-    s = Sorter(**d)
-
-    print_sorts([s], SMALL_DATA)
