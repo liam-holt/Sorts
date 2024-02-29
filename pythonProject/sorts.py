@@ -12,6 +12,11 @@ Quick Sort w/ Insertion:
     0.00212 seconds on average.		time ratio: 1.0
     time: O(n*lg_n)~O(n^2)		space: O(lg_n)~O(n)
     flow: Iterative		stability: Unstable		movement: Inplace
+    
+Quick Sort w/ Insertion:
+    0.00213 seconds on average.		time ratio: 1.0
+    time: O(n*lg_n)~O(n^2)		space: O(lg_n)~O(n)
+    flow: Recursive		stability: Unstable		movement: Inplace
 
 Quick Sort (Simple):
     0.00244 seconds on average.		time ratio: 1.152
@@ -31,11 +36,6 @@ Heap Sort:
 Heap Sort:
     0.00553 seconds on average.		time ratio: 2.612
     time: O(n*lg_n)		space: O(lg_n)
-    flow: Recursive		stability: Unstable		movement: Inplace
-
-Quick Sort w/ Insertion: (odd, might have made a mistake)
-    0.00949 seconds on average.		time ratio: 4.481
-    time: O(n*lg_n)~O(n^2)		space: O(lg_n)~O(n)
     flow: Recursive		stability: Unstable		movement: Inplace
 
 Merge Sort w/ Insertion:
@@ -91,6 +91,7 @@ class Sorter:
 
 
 def mean(arr):
+    print(len(arr))
     return sum(arr) / len(arr)
 
 
@@ -601,4 +602,15 @@ if __name__ == '__main__':
         sort_small_data]
 
     # print_sorts(large_sorters, LARGE_DATA)
-    print_sorts(small_sorters, SMALL_DATA)
+    # print_sorts(small_sorters, SMALL_DATA)
+
+    d = {
+            "name": "Quick Sort w/ Insertion", "time": "O(n*lg_n)~O(n^2)",
+            "space": "O(lg_n)~O(n)", "is_inplace": True, "is_stable": False,
+            "is_recursive": True,
+            "function": quick_sort_recursive_inplace_unstable_insertion
+        }
+
+    s = Sorter(**d)
+
+    print_sorts([s], SMALL_DATA)
