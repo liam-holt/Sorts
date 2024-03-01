@@ -3,7 +3,41 @@ from random import randint, choice
 from copy import deepcopy
 
 """ 
- n = 1,000,000
+ n = 100000
+Quick Sort w/ Insertion:
+    0.34643 seconds on average.		time ratio: 1.0
+    time: O(n*lg_n)~O(n^2)		space: O(lg_n)~O(n)
+    flow: Recursive		stability: Unstable		movement: Inplace
+
+Quick Sort w/ Insertion:
+    0.3517 seconds on average.		time ratio: 1.015
+    time: O(n*lg_n)~O(n^2)		space: O(lg_n)~O(n)
+    flow: Iterative		stability: Unstable		movement: Inplace
+
+Quick Sort (Simple):
+    0.37288 seconds on average.		time ratio: 1.076
+    time: O(n*lg_n)~O(n^2)		space: O(n*lg_n)~O(n^2)
+    flow: Recursive		stability: Stable		movement: Mobile
+
+Merge Sort w/ Insertion:
+    0.50827 seconds on average.		time ratio: 1.467
+    time: O(n*lg_n)		space: O(n*lg_n)
+    flow: Recursive		stability: Stable		movement: Mobile
+
+Heap Sort:
+    0.96611 seconds on average.		time ratio: 2.789
+    time: O(n*lg_n)		space: O(1)
+    flow: Iterative		stability: Unstable		movement: Inplace
+
+Heap Sort:
+    1.00205 seconds on average.		time ratio: 2.892
+    time: O(n*lg_n)		space: O(lg_n)
+    flow: Recursive		stability: Unstable		movement: Inplace
+
+Merge Sort w/ Insertion:
+    3.65459 seconds on average.		time ratio: 10.549
+    time: O(n*lg^2_n)		space: O(lg_n)
+    flow: Recursive		stability: Stable		movement: Inplace
 """
 
 """
@@ -62,8 +96,8 @@ Bubble Sort:
 LARGE_DATA = [  # n = 1,000,000
     [
         randint(-1_000_000, 1_000_000)
-        for _ in range(1_000_000)
-    ] for _ in range(100)
+        for _ in range(100_000)
+    ] for _ in range(10)
 ]
 
 SMALL_DATA = [  # n = 1,000
@@ -601,6 +635,6 @@ if __name__ == '__main__':
     small_sorters = large_sorters + [Sorter(**data) for data in
         sort_small_data]
 
-    # print_sorts(large_sorters, LARGE_DATA)
+    print_sorts(large_sorters, LARGE_DATA)
     # print_sorts(small_sorters, SMALL_DATA)
 
