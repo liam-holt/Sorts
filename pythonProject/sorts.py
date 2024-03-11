@@ -598,16 +598,18 @@ def intro_sort_recursive_inplace_unstable(arr):
             quick_sort(arr, pivot + 1, end, depth + 1)
 
     def heapify(arr, n, i, start):
-        largest = start + i
+        j = start + i
+        m = start + n
+        largest = j
         left = start + 2 * i + 1
         right = start + 2 * i + 2
-        if left < n and arr[i] < arr[left]:
+        if left < m and arr[largest] < arr[left]:
             largest = left
-        if right < n and arr[largest] < arr[right]:
+        if right < m and arr[largest] < arr[right]:
             largest = right
-        if largest != i:
-            arr[i], arr[largest] = arr[largest], arr[i]
-            heapify(arr, n, largest, start)
+        if largest != j:
+            arr[j], arr[largest] = arr[largest], arr[j]
+            heapify(arr, n, largest - start, start)
 
     def heap_sort(arr, start, end):
         n = end - start + 1
