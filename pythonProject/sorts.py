@@ -578,7 +578,7 @@ def intro_sort_recursive_inplace_unstable(arr):
             arr[j + 1] = key
 
     def partition(arr, start, end):
-        pivot = arr[end]
+        pivot = median_of_three(arr, start, end)
         i = start
         for j in range(start, end):
             if arr[j] < pivot:
