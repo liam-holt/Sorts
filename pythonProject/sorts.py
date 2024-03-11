@@ -562,6 +562,68 @@ def insertion_sort_iterative_inplace_stable(arr):
 
     return arr
 
+# introsort
+def intro_sort_recursive_inplace_unstable(arr):
+    n = len(arr)
+    max_depth = 2 * (n.bit_length() - 1)
+    size_threshold = 16
+
+    def insertion_sort(arr, start, end):
+        for i in range(start + 1, end + 1):
+            key = arr[i]
+            j = i - 1
+            while j >= start and arr[j] > key:
+                arr[j + 1] = arr[j]
+                j -= 1
+            arr[j + 1] = key
+
+    def partition(arr, start, end):
+        pivot = arr[end]
+        i = start
+        for j in range(start, end):
+            if arr[j] < pivot:
+                arr[i], arr[j] = arr[j], arr[i]
+                i += 1
+        arr[i], arr[end] = arr[end], arr[i]
+        return i
+
+    def quick_sort(arr, start, end, depth):
+        if end - start <= size_threshold:
+            insertion_sort(arr, start, end)
+        elif depth >= max_depth:
+            heap_sort(arr, start, end)
+        else:
+            pivot = partition(arr, start, end)
+            quick_sort(arr, start, pivot - 1, depth + 1)
+            quick_sort(arr, pivot + 1, end, depth + 1)
+
+    def heapify(arr, n, i, start):
+        largest = start + i
+        left = start + 2 * i + 1
+        right = start + 2 * i + 2
+        if left < n and arr[i] < arr[left]:
+            largest = left
+        if right < n and arr[largest] < arr[right]:
+            largest = right
+        if largest != i:
+            arr[i], arr[largest] = arr[largest], arr[i]
+            heapify(arr, n, largest, start)
+
+    def heap_sort(arr, start, end):
+        n = end - start + 1
+        for i in range(n // 2 - 1, -1, -1):
+            heapify(arr, n, i, start)
+        for i in range(n - 1, 0, -1):
+            arr[start + i], arr[start] = arr[start], arr[start + i]
+            heapify(arr, i, 0)
+
+    quick_sort(arr, 0, n - 1, 0)
+
+# timsort
+
+# mergesort
+
+# quicksort
 
 if __name__ == '__main__':
     sort_large_data = [
@@ -635,6 +697,6 @@ if __name__ == '__main__':
     small_sorters = large_sorters + [Sorter(**data) for data in
         sort_small_data]
 
-    print_sorts(large_sorters, LARGE_DATA)
+    # print_sorts(large_sorters, LARGE_DATA)
     # print_sorts(small_sorters, SMALL_DATA)
 
