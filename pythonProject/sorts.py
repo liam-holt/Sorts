@@ -568,25 +568,6 @@ def intro_sort_recursive_inplace_unstable(arr):
     max_depth = 2 * (n.bit_length() - 1)
     size_threshold = 16
 
-    def insertion_sort(arr, start, end):
-        for i in range(start + 1, end + 1):
-            key = arr[i]
-            j = i - 1
-            while j >= start and arr[j] > key:
-                arr[j + 1] = arr[j]
-                j -= 1
-            arr[j + 1] = key
-
-    def partition(arr, start, end):
-        pivot = median_of_three(arr, start, end)
-        i = start
-        for j in range(start, end):
-            if arr[j] < pivot:
-                arr[i], arr[j] = arr[j], arr[i]
-                i += 1
-        arr[i], arr[end] = arr[end], arr[i]
-        return i
-
     def quick_sort(arr, start, end, depth):
         if end - start <= size_threshold:
             insertion_sort(arr, start, end)
@@ -617,7 +598,7 @@ def intro_sort_recursive_inplace_unstable(arr):
             heapify(arr, n, i, start)
         for i in range(n - 1, 0, -1):
             arr[start + i], arr[start] = arr[start], arr[start + i]
-            heapify(arr, i, 0)
+            heapify(arr, i, 0, start)
 
     quick_sort(arr, 0, n - 1, 0)
 
